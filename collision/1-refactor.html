@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Refactor Existing Code</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="chapter-item expanded "><a href="1-refactor.html" class="active"><strong aria-hidden="true">1.</strong> Refactor Existing Code</a></li><li class="chapter-item expanded "><a href="2-bullet-collision.html"><strong aria-hidden="true">2.</strong> Bullet Collision</a></li><li class="chapter-item expanded "><a href="3-target.html"><strong aria-hidden="true">3.</strong> Target</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="refactor-existing-code"><a class="header" href="#refactor-existing-code">Refactor Existing Code</a></h1>
+<p>Before adding new functionality to our game, let's first make some improvements to the current code.</p>
+<h2 id="store-bullet-speed-in-vector"><a class="header" href="#store-bullet-speed-in-vector">Store Bullet Speed in Vector</a></h2>
+<p>In <code>Bullet.gd</code>, we have the following two lines around the top of the file:</p>
+<pre><code>var speed_x
+var speed_y
+</code></pre>
+<p>Although these variables are different values, they both represent a component of the same thing: the bullet's speed. When variables have a common relationship like this, it is common to put them together somehow. In this case, we will store both components of the bullet's speed in a vector.</p>
+<p>A vector is a type of variable that has two components: an &quot;x&quot; value and a &quot;y&quot; value. In fact, you have already worked with vectors before. Look in the bullet's <code>_process</code> function:</p>
+<pre><code>self.position.x += delta * speed_x 
+self.position.y += delta * speed_y
+</code></pre>
+<p><code>self.position</code> returns a vector. We then got the &quot;x&quot; and &quot;y&quot; components with <code>.x</code> and <code>.y</code>, respectively. We will use the same concept to store the bullet's speed. Make the following change (remove the red text and add the green text):</p>
+<pre><code class="language-diff">- var speed_x
+- var speed_y
++ var speed = Vector2()
+</code></pre>
+<p>Next, change the <code>init</code> function to the following:</p>
+<pre><code class="language-diff">  func init(angle):
+-     speed_x = SPEED * cos(angle)
+-     speed_y = SPEED * sin(angle)
++     speed.x = SPEED * cos(angle)
++     speed.y = SPEED * sin(angle)
+</code></pre>
+<p>Next, change the <code>_process</code> function to the following:</p>
+<pre><code class="language-diff">  func _process(delta):
+-     self.position.x += delta * speed_x 
+-     self.position.y += delta * speed_y
+-     self.rotation = atan(speed_y / speed_x)
+-     speed_y += GRAVITY
++     self.position.x += delta * speed.x 
++     self.position.y += delta * speed.y
++     self.rotation = atan(speed.y / speed.x)
++     speed.y += GRAVITY
+</code></pre>
+<p>Run your game and make sure it still works.</p>
+<h2 id="replace-atan-with-look_at"><a class="header" href="#replace-atan-with-look_at">Replace <code>atan</code> with <code>look_at</code></a></h2>
+<p>Now that we are storing the bullet's speed in a vector, let's take advantage of it! Our code currently calculates the rotation of the the bullet with the <code>atan</code> function. Although this works, it might be confusing for someone who it not familiar with trigonometry. Instead, we will replace it with an easier-to-understand function: <code>look_at</code>.</p>
+<p>Every Node2D (including our Bullet, an Area2D which inherits Node2D) has a function called <code>look_at</code>. You pass this function a vector, and the Node2D will rotate to look at the coordinates provided. For example, the code <code>self.look_at(Vector2(0, 0))</code> would make the Node2D rotate to look at the coordinate (0, 0), which is the top-left corner of the game window. We want our bullet to look at the direction it is moving. We can do this by adding the bullet's current position with its current speed.</p>
+<p>Change the following line in the <code>_process</code> function:</p>
+<pre><code class="language-diff">  func _process(delta):
+      self.position.x += delta * speed.x 
+      self.position.y += delta * speed.y
+-     self.rotation = atan(speed.y / speed.x)
++     self.look_at(self.position + speed)
+      speed.y += GRAVITY
+</code></pre>
+<p>Run your game and make sure it still works.</p>
+<h2 id="move-new-bullet-to-end-of-cannon"><a class="header" href="#move-new-bullet-to-end-of-cannon">Move New Bullet to End of Cannon</a></h2>
+<p>Currently, our bullet's position is being initialized to the position of the cannon, which ends up being the base of the cannon because of the offset changes we made. This looks weird when shooting the bullet. We can see it moving along the entire cannon length. It would look better if the bullet's position was initialized to be the end of the cannon.</p>
+<p>Fortunately, we can use our speed vector and the angle of the cannon to do this. Add the following constant at the top of the file:</p>
+<pre><code class="language-diff">  const SPEED = 800
+  const GRAVITY = 15
++ const CANNON_LENGTH = 30
+  var speed = Vector2()
+</code></pre>
+<p>Next, add the following line to the <code>init</code> function:</p>
+<pre><code class="language-diff">  func init(angle):
+      speed.x = SPEED * cos(angle)
+      speed.y = SPEED * sin(angle)
++     self.position += speed.normalized() * CANNON_LENGTH
+</code></pre>
+<p>Recall that <code>speed</code> is a vector with &quot;x&quot; and &quot;y&quot; values. Vectors can also be thought to have a &quot;length&quot; and a &quot;direction.&quot; For example, consider this triangle.</p>
+<p><img src="https://www.storyofmathematics.com/wp-content/uploads/2020/07/3-4-5-Right-Triangle-Proof.jpg" alt="Triangle" /></p>
+<p>This triangle could be considered a vector where x = 4 and y = 3. In this case, the vector's length is 5 and its direction is 36.87 degrees.</p>
+<p>In a similar way, <code>speed</code> has a length and a direction. It's length should be equal to the <code>SPEED</code> constant and its direction should be equal to the <code>angle</code> variable in the <code>init</code> function. What we want to do is modify this vector by reducing its length while maintaining its angle. The <code>normalized</code> function changes the vector to have a length of 1 while maintaining the angle. Then, we multiply it by <code>CANNON_LENGTH</code> to change the vector's length to the length of the cannon while maintaining the angle.</p>
+<p>Run your game and make sure it still works. You may have to adjust <code>CANNON_LENGH</code> depending on which bullet image you chose. Now with these code changes made, let's start doing some collision detection!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="2-bullet-collision.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="2-bullet-collision.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

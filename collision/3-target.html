@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Target</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="chapter-item expanded "><a href="1-refactor.html"><strong aria-hidden="true">1.</strong> Refactor Existing Code</a></li><li class="chapter-item expanded "><a href="2-bullet-collision.html"><strong aria-hidden="true">2.</strong> Bullet Collision</a></li><li class="chapter-item expanded "><a href="3-target.html" class="active"><strong aria-hidden="true">3.</strong> Target</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="target"><a class="header" href="#target">Target</a></h1>
+<p>With our bullet created, now we have to give it something to hit. The steps to set up the target scene have largely been covered previously, so I will provide higher-level instructions. If you have trouble, let me know on Discord.</p>
+<h2 id="set-up-the-scene"><a class="header" href="#set-up-the-scene">Set Up the Scene</a></h2>
+<ol>
+<li>Create a new scene.</li>
+<li>Set the root node to be an Area2D, just like the bullet scene. Rename this node &quot;Target.&quot;</li>
+<li>Add a Sprite as a child of the &quot;Target&quot; node</li>
+<li>Copy a target image to the game folder. Here is a good image:<br>Kenney Game Assets\2D assets\Shooting Gallery\PNG\Objects\target_red3.png</li>
+<li>Set the Sprite texture to the image you selected.</li>
+<li>Add a CollisionShape2D as a child of the &quot;Target&quot; node</li>
+<li>Set the Shape of the CollisionShape2D to a CircleShape2D. Set its radius to 64.</li>
+<li>Save the scene.</li>
+<li>Attach a script to the Target node. Delete all of the comments in the script file.</li>
+</ol>
+<p>Change the view from the Script view to the 2D view. Go to the Game scene. The 2D view should show the tank. To the right of the &quot;Add Node&quot; button (looks like a plus sign) is another button that looks like a couple of chain links. This is the &quot;Instance&quot; button and is how you can add pre-made scenes, such as our new Target scene.</p>
+<p><img src="instance.png" alt="Instance" /></p>
+<p>With the Game node selected, click this Instance button. In the scene list window, select the Target scene. You should see your target appear in the top-left. Move it to an appropriate position. Also, I think the target is a bit too big, so let's scale it down. Select the Target and in the Inspector tab, under Node2D properties, expand the Transform line and change the Scale x and y values both from 1 to 0.5. Your Game scene should look like this:</p>
+<p><img src="tanktarget.png" alt="Tank Target" /></p>
+<h2 id="write-the-code"><a class="header" href="#write-the-code">Write the Code</a></h2>
+<p>When an Area2D collides with another Area2D, this emits a signal called &quot;area_entered.&quot; We will leverage this by connecting the signal to a function containing what we want to do when a bullet hits the target.</p>
+<p>In the Target script, modify the <code>_ready</code> function to look like this:</p>
+<pre><code class="language-diff">  func _ready():
++     self.connect(&quot;area_entered&quot;, self, &quot;on_hit&quot;)
+</code></pre>
+<p>This is saying that when the target emits an &quot;area_entered&quot; signal, it will call the <code>on_hit</code> function in the Target code. Currently, the Target code does not have this function, so let's add it at the bottom.</p>
+<pre><code class="language-diff">  func _ready():
+      self.connect(&quot;area_entered&quot;, self, &quot;on_hit&quot;)
+
+
++ func on_hit(area):
++     print(&quot;Target hit!&quot;)
+</code></pre>
+<p>Run the game and test it out. Aim your shot to hit the target. If your bullet hits the target, the output console should print &quot;Target hit!&quot;</p>
+<p>With collision detection working, let's do something more appropriate than simply printing. We can start by deleting the bullet. Notice that the <code>on_hit</code> function contain a parameter: <code>area</code>. This represent the Area2D that hit the target. In our case, this will always be a bullet. So let's delete it with <code>queue_free</code>.</p>
+<pre><code class="language-diff">  func on_hit(area):
+-     print(&quot;Target hit!&quot;)
++     area.queue_free()
+</code></pre>
+<h3 id="random-position"><a class="header" href="#random-position">Random Position</a></h3>
+<p>Next, let's move the target to another position when it gets hit. We want this new position to be randomly chosen. Specifically, let's require that the new x-coordinate be between 400 and 900, and the new y-coordinate be between 100 and 400. For now, let's focus on the y-coordinate (100-400 range)</p>
+<p>Godot provides a couple ways to do randomness. We will use the <code>randi</code> function. This function generates a random unsigned 32-bit integer. This is a fancy way of saying that it will generate a value between 0 and 4294967295. Now, for the y-coordinate, this range is not what we need. Fortunately, we can use a cool new operator, the modulo operator: <code>%</code>.</p>
+<p>This operator is similar to the division operator: <code>/</code>. However, instead of calculating the quotient of the division, the modulo operator returns the <em>remainder</em> of the division. For example, 13 divided by 5 is &quot;2 remainder 3&quot; because 2 * 5 + 3 = 13. In terms of how these operators behave in actual code, <code>13 / 5 = 2</code> and <code>13 % 5 = 3</code>. Notice how this second snippet returns the remainder, or <em>modulus</em>.</p>
+<p>We can use this operator to get the range we want. A useful property of the modulo operator is that its calculation will always be between 0 (inclusive) and the divisor (exclusive) For example, let's look at more modulo examples:</p>
+<pre><code>1 % 3 = 1
+2 % 3 = 2
+3 % 3 = 0
+4 % 3 = 1
+5 % 3 = 2
+6 % 3 = 0
+7 % 3 = 1
+8 % 3 = 2
+</code></pre>
+<p>Notice that the modulus is always between 0 and 2. The lower bound is always 0 and the upper bound is one less than the divisor (3 in this case). Let's use this to get a random value in the desired y-coordinate range:</p>
+<ol>
+<li>Calculate the size of the range: (100-400) constitutes 301 possible values.</li>
+<li>Generate the random value and &quot;mod&quot; it with our range size: Gives a value in range (0-300).</li>
+<li>Add the lower bound to the calculated modulus: Adding 100 to the calculated modulus get a value in range (100-400).</li>
+</ol>
+<p>This is a lot of explanation for a comparative tiny amount of code to be added to <code>on_hit</code>:</p>
+<pre><code class="language-diff">  func on_hit(area):
+      area.queue_free()
++     self.position.y = randi() % 300 + 100
+</code></pre>
+<p>Let's do the same thing to calculate a random new x-coordinate.</p>
+<pre><code class="language-diff">  func on_hit(area):
+      area.queue_free()
+      self.position.y = randi() % 300 + 100
++     self.position.x = randi() % 500 + 400
+</code></pre>
+<p>Run your game and make sure it works. If a bullet hits a target, the bullet should disappear and the target should move to a new position.</p>
+<p>One last thing to do here. If you run your program a second time, and a third, time, and a fourth, etc, you may notice that the target moves to the same positions each run of the program. The reason is beyond the scope of this lesson, but if you are interested, take a look at the <a href="https://en.wikipedia.org/wiki/Random_seed">Random Seed</a> wikipedia page. To fix this, add the following line to the Target's <code>_ready</code> function:</p>
+<pre><code class="language-diff">  func _ready():
+      self.connect(&quot;area_entered&quot;, self, &quot;on_hit&quot;)
++     randomize()
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="2-bullet-collision.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="conclusion.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="2-bullet-collision.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="conclusion.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
